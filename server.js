@@ -5,7 +5,7 @@ const app = express();
 app.use(express.json());
 
 // ใส่ GAS Web App URL
-const GAS_URL = "https://script.google.com/macros/s/AKfycbyjPTSeOwhTgAzKsC-nbZ76bQIkE-uwTH3z_ixw3gl0JVWw_MTk-gygk4bSuM3raYo/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzdviQtFP0Gw9D5AJshMBSoVFQOGhN6wTlwNGTY9f9v8xscyhFHtPS2wF3cAF1gcvY/exec";
 
 // LINE จะ POST มาที่นี่
 app.post("/webhook", async (req, res) => {
