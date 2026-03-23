@@ -1,18 +1,14 @@
 const express = require("express");
-const axios = require("axios");
-const app = express();
+const axios   = require("axios");
+const app     = express();
 
 app.use(express.json());
 
-// ใส่ GAS Web App URL
 const GAS_URL = "https://script.google.com/macros/s/AKfycbzdviQtFP0Gw9D5AJshMBSoVFQOGhN6wTlwNGTY9f9v8xscyhFHtPS2wF3cAF1gcvY/exec";
 
-// LINE จะ POST มาที่นี่
+// LINE Webhook
 app.post("/webhook", async (req, res) => {
-  // ต้องตอบ 200 ทันทีก่อนเสมอ
   res.status(200).json({ status: "ok" });
-
-  // แล้วค่อยส่งต่อไป GAS
   try {
     await axios.post(GAS_URL, req.body, {
       headers: { "Content-Type": "application/json" },
@@ -21,6 +17,29 @@ app.post("/webhook", async (req, res) => {
   } catch (err) {
     console.error("GAS error:", err.message);
   }
+});
+
+// LIFF POST proxy — รับจาก advisor/student LIFF แล้วส่งต่อไป GAS
+app.post("/liff", async (req, res) => {
+  try {
+    const result = await axios.post(GAS_URL, req.body, {
+      headers: { "Content-Type": "application/json" },
+      maxRedirects: 5
+    });
+    res.set("Access-Control-Allow-Origin", "*");
+    res.json(result.data);
+  } catch (err) {
+    console.error("LIFF proxy error:", err.message);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// CORS preflight
+app.options("/liff", (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
+  res.set("Access-Control-Allow-Headers", "Content-Type");
+  res.set("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.sendStatus(200);
 });
 
 // Health check
