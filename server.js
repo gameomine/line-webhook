@@ -4,7 +4,7 @@ const app     = express();
 
 app.use(express.json());
 
-const GAS_URL = "https://script.google.com/macros/s/AKfycbz2jk4XCtExgKThoPILh4xjfvfWD1HPgwDWYXb-hOLS52bJsg192jxHVTKIBL93uts/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzNU6HQJ1mJMa57Ri1RghSx4Zh_urWA88XAPasSkMzU99yP9CmXcFzYdDsEgDNiIk0/exec";
 
 // LINE Webhook
 app.post("/webhook", async (req, res) => {
